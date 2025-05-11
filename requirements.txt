@@ -4,4 +4,3 @@ pytest
 pytest-html
 jsonschema
 python-dotenv
-requests-mock
