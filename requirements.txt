@@ -1,0 +1,7 @@
+# requirements.txt
+requests
+pytest
+pytest-html
+jsonschema
+python-dotenv
+requests-mock
