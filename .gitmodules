@@ -1,0 +1,6 @@
+[submodule "node-express-realworld-example-app"]
+	path = node-express-realworld-example-app
+	url = https://github.com/Maragoth/node-express-realworld-example-app.git
+[submodule "react-redux-realworld-example-app"]
+	path = react-redux-realworld-example-app
+	url = https://github.com/Maragoth/react-redux-realworld-example-app.git

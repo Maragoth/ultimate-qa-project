@@ -1,6 +1,17 @@
-# requirements.txt
-requests
-pytest
-pytest-html
-jsonschema
-python-dotenv
+# API Testing dependencies
+requests==2.31.0
+pytest==8.2.0
+pytest-html==4.1.1
+jsonschema==4.22.0
+python-dotenv==1.0.1
+
+# Reporting
+allure-pytest==2.14.1
+pytest-json-report==1.5.0
+
+# Mobile Testing (if you automate Appium with Python)
+Appium-Python-Client==3.1.0
+
+# Linting & Code Quality (optional but recommended)
+black==24.4.2
+flake8==7.0.0
