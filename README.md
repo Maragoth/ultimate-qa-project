@@ -1,0 +1,174 @@
+# 🛡️ Ultimate QA Project – Full-Stack Automation Framework
+
+A comprehensive QA Automation project simulating real-world enterprise testing environments.  
+It combines multiple QA disciplines in a unified framework:
+
+- ✅ Web UI Testing (Playwright)
+- ✅ API Testing (Python + Pytest + JSON Schema)
+- ✅ Mobile Testing (Appium + Android Emulator)
+- ✅ Hybrid UI + API Tests
+- ✅ CI/CD Automation (GitHub Actions, matrix builds)
+- ✅ Dockerized Database (PostgreSQL)
+- ✅ Local Frontend & Backend for testing
+
+---
+
+## 📦 Project Structure
+
+```
+ultimate-qa-project/
+├── node-express-realworld-example-app/ # Backend API (Node.js)
+├── react-redux-realworld-example-app/ # Frontend UI (React)
+├── api-tests/ # API Automation Tests (Pytest)
+├── ui-tests/ # UI Automation Tests (Playwright)
+├── mobile-tests/ # Mobile Tests (Appium)
+├── start-project.ps1 # Start DB, Backend, Frontend (Windows script)
+└── README.md # Documentation
+└── ProjectPlan.md # Goals, Roadmap, strategy, technology
+```
+
+
+---
+
+## 🎯 Project Goals
+
+- Master modern QA tools and best practices
+- Simulate real company workflows and automation tasks
+- Automate UI, API, Mobile and Hybrid test scenarios
+- Implement CI/CD pipelines with matrix builds and reports
+- Run tests in Docker containers for consistency (DB only)
+
+---
+
+## 🔧 Tools & Technologies
+
+- **UI Testing**: Playwright (JavaScript/TypeScript)
+- **API Testing**: Python + Requests + Pytest + JSON Schema
+- **Mobile Testing**: Appium + Android Emulator
+- **CI/CD**: GitHub Actions (matrix builds, reports)
+- **Docker**: Docker (PostgreSQL DB)
+- **Reports**: Allure, pytest-html
+- **Version Control**: Git + GitHub
+
+---
+
+## 🛠️ Setup Instructions
+
+### 1️⃣ Clone Repositories
+
+```bash
+git clone https://github.com/Maragoth/ultimate-qa-project.git
+cd ultimate-qa-project
+
+git clone https://github.com/Maragoth/node-express-realworld-example-app.git
+git clone https://github.com/Maragoth/react-redux-realworld-example-app.git
+```
+
+### 2️⃣ Install Dependencies
+
+```bash
+npm install --prefix node-express-realworld-example-app
+npm install --prefix react-redux-realworld-example-app
+pip install -r requirements.txt
+```
+
+### 3️⃣ Environment Variables
+
+In folder: ```node-express-realworld-example-app/```
+
+Create ```.env```:
+```
+DATABASE_URL="postgresql://postgres:postgres@localhost:5432/conduit?schema=public"
+JWT_SECRET="super-secret"
+NODE_ENV=development
+```
+
+### 4️⃣ Start Database
+```bash
+docker run --name conduit-db -e POSTGRES_PASSWORD=postgres -p 5432:5432 -d postgres
+```
+### 5️⃣ Generate Prisma Client & Apply Migrations
+```
+cd node-express-realworld-example-app
+npx prisma generate
+npx prisma migrate deploy
+```
+### 6️⃣ Start Backend API (New Terminal)
+```
+cd node-express-realworld-example-app
+npx nx serve api
+```
+### 7️⃣ Start Frontend (New Terminal)
+```
+cd react-redux-realworld-example-app
+npm start
+```
+### ✅ Alternative: Automatic Script (Windows)
+You can use prepared script:
+```
+.\start-project.ps1
+```
+## 🛑 Stopping Services
+To stop Frontend and Backend, simply close their terminal windows.
+
+To stop PostgreSQL database, you have two options:
+
+### 1️⃣ Docker CLI:
+```
+docker stop conduit-db
+```
+### 2️⃣ Docker Desktop:
+- Open Docker Desktop
+
+- Go to Containers tab
+
+- Click Stop next to conduit-db
+
+### 🖥️ Access Application
+
+Frontend: http://localhost:4100/
+
+Backend API: http://localhost:3000/api
+
+## 🚀 Running Tests
+
+### API Tests
+```
+pytest api-tests/
+```
+### UI Tests (Playwright)
+```
+npx playwright test
+```
+### Mobile Tests (Appium)
+```
+pytest mobile-tests/
+```
+
+## 🚧 CI/CD & Automation (Planned)
+- GitHub Actions workflows for automated tests
+
+- Matrix builds for environment coverage
+
+- Allure / pytest-html reports integration
+
+- Dockerized testing (API tests)
+## 👤 Author
+
+**Adam Fedorowicz**  
+QA Automation Engineer | Full-Stack Tester | DevOps Learner
+
+Passionate about creating real-world automation frameworks that combine UI, API, and CI/CD workflows.  
+Experienced in Selenium, Playwright, Pytest, Postman, and Dockerized test environments.  
+Focused on practical, scalable, and production-ready QA solutions.  
+
+## 📫 Find Me Online
+
+- 🌐 [LinkedIn – Adam Fedorowicz](https://www.linkedin.com/in/adam-fedorowicz-UK)
+- 💻 [GitHub – Maragoth](https://github.com/Maragoth)
+- 💼 [Upwork – QA Automation Engineer](https://www.upwork.com/freelancers/~018d6c0e188850f30d?mp_source=share)
+  
+## 🛡️ License
+
+© 2025 Adam Fedorowicz  
+Licensed under the [MIT License](https://opensource.org/licenses/MIT).
