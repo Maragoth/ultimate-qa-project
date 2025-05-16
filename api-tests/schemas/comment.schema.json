@@ -1,0 +1,26 @@
+{
+  "type": "object",
+  "properties": {
+    "comment": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "integer" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" },
+        "body": { "type": "string" },
+        "author": {
+          "type": "object",
+          "properties": {
+            "username": { "type": "string" },
+            "bio": { "type": ["string", "null"] },
+            "image": { "type": "string" },
+            "following": { "type": "boolean" }
+          },
+          "required": ["username", "bio", "image", "following"]
+        }
+      },
+      "required": ["id", "createdAt", "updatedAt", "body", "author"]
+    }
+  },
+  "required": ["comment"]
+}
