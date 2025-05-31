@@ -1,0 +1,26 @@
+{
+  "name": "ui-tests",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "playwright test",
+    "setup": "ts-node fixtures/setup.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.52.0",
+    "@types/axios": "^0.9.36",
+    "@types/node": "^22.15.19",
+    "playwright": "^1.52.0",
+    "ts-node": "^10.9.2"
+  },
+  "dependencies": {
+    "axios": "^1.9.0"
+  }
+}
