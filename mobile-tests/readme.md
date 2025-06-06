@@ -154,29 +154,38 @@ http://192.168.1.191:4100
 ```
 mobile-tests/
 ├── tests/
-│   ├── login.spec.py                       # 🕒 user login flow
-│   ├── invalid-login.spec.py               # 🕒 invalid login (error message)
-│   ├── registration.spec.py                # 🕒 user registration flow
-│   ├── article-create.spec.py              # 🕒 create a new article
-│   ├── article-edit.spec.py                # 🕒 edit article content
-│   ├── article-readmore.spec.py            # 🕒 open full article from preview
-│   ├── article-favorite.spec.py            # 🕒 favorite/unfavorite articles
-│   ├── comments.spec.py                    # 🕒 add and delete comment
-│   ├── article-delete.spec.py              # 🕒 delete article
-│   ├── follow-unfollow.spec.py             # 🕒 follow/unfollow author and verify feed
-│   ├── tag-filter-popular.spec.py          # 🕒 filter by "Popular Tags"
-│   ├── tag-filter-article.spec.py          # ⚠️ BLOCKED – tag click redirect issue
-│   ├── tag-popularity.spec.py              # 🕒 new tag appears in Popular Tags
-│   ├── article-author-profile.spec.py      # 🕒 click article author → profile
-│   ├── comment-author-profile.spec.py      # 🕒 click comment author → profile
-│   ├── update-profile-info.spec.py         # 🕒 update username, email, bio, avatar
-│   ├── update-password.spec.py             # 🕒 update password and re-login
-│   ├── update-profile-image.spec.py        # 🕒 update profile image and verify
-│   └── navigation.spec.py                  # 🕒 navbar behavior based on login state
+│   ├── test_login.py                       # 🕒 user login flow
+│   ├── test_invalid_login.py               # 🕒 invalid login (error message)
+│   ├── test_registration.py                # 🕒 user registration flow
+│   ├── test_article_create.py              # 🕒 create a new article
+│   ├── test_article_edit.py                # 🕒 edit article content
+│   ├── test_article_readmore.py            # 🕒 open full article from preview
+│   ├── test_article_favorite.py            # 🕒 favorite/unfavorite articles
+│   ├── test_comments.py                    # 🕒 add and delete comment
+│   ├── test_article_delete.py              # 🕒 delete article
+│   ├── test_follow_unfollow.py             # 🕒 follow/unfollow author and verify feed
+│   ├── test_tag_filter_popular.py          # 🕒 filter by "Popular Tags"
+│   ├── test_tag_filter_article.py          # ⚠️ BLOCKED – tag click redirect issue
+│   ├── test_tag_popularity.py              # 🕒 new tag appears in Popular Tags
+│   ├── test_article_author_profile.py      # 🕒 click article author → profile
+│   ├── test_comment_author_profile.py      # 🕒 click comment author → profile
+│   ├── test_update_profile_info.py         # 🕒 update username, email, bio, avatar
+│   ├── test_update_password.py             # 🕒 update password and re-login
+│   ├── test_update_profile_image.py        # 🕒 update profile image and verify
+│   └── test_navigation.py                  # 🕒 navbar behavior based on login state
+├── pages/
+│   ├── __init__.py
+│   ├── article_page.py                     # Article creation and management
+│   ├── login_page.py                       # Login form interactions
+│   └── registration_page.py                # User registration form
 ├── fixtures/
 │   └── setup.py
 ├── helpers/
-│   └── session.py
+│   ├── __init__.py
+│   ├── api_helpers.py                      # API interaction helpers
+│   ├── session.py                          # Session management
+│   ├── test_data.py                        # Test data and constants
+│   └── waits.py                            # Custom wait conditions
 ├── requirements.txt
 └── README.md
 ```

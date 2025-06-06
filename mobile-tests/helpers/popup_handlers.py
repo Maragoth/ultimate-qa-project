@@ -1,43 +1,20 @@
-import sys
-import os
-
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-
-import pytest
-from pages.login_page import LoginPage
-from helpers.api_helpers import create_random_user_via_api
-from helpers.config import BASE_URL
-from helpers.popup_handlers import handle_popups
-from helpers.assertions import verify_logged_in
-from helpers.waits import wait_for_element
-from helpers.popup_handlers import handle_popups
 from selenium.webdriver.common.by import By
-from selenium.common.exceptions import (
-    NoSuchElementException,
-    TimeoutException,
-    ElementClickInterceptedException,
-)
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
-
-# Get frontend host from environment variable, default to localhost for local development
-FRONTEND_HOST = os.getenv("FRONTEND_HOST", "localhost")
-FRONTEND_PORT = os.getenv("FRONTEND_PORT", "4100")
-BASE_URL = f"http://{FRONTEND_HOST}:{FRONTEND_PORT}"
 
 
 def dismiss_translation_popup(driver):
     """Dismiss the Chrome translation popup by selecting 'Never translate pages in English'"""
     try:
         # Wait for the translation popup to appear
-        popup = WebDriverWait(driver, 3).until(  # Reduced from 10 to 3 seconds
+        popup = WebDriverWait(driver, 3).until(
             EC.presence_of_element_located(
                 (By.XPATH, '//div[contains(text(), "Przetłumaczyć")]')
             )
         )
 
         # Click the gear icon
-        gear_icon = WebDriverWait(driver, 3).until(  # Reduced from 5 to 3 seconds
+        gear_icon = WebDriverWait(driver, 3).until(
             EC.element_to_be_clickable(
                 (
                     By.XPATH,
@@ -48,7 +25,7 @@ def dismiss_translation_popup(driver):
         driver.execute_script("arguments[0].click();", gear_icon)
 
         # Click "Never translate pages in English"
-        never_translate = WebDriverWait(driver, 3).until(  # Reduced from 5 to 3 seconds
+        never_translate = WebDriverWait(driver, 3).until(
             EC.element_to_be_clickable(
                 (
                     By.XPATH,
@@ -73,7 +50,7 @@ def dismiss_cookie_popup(driver):
     """Dismiss the cookie consent popup"""
     try:
         # Try to find and click "Odrzuć wszystko" button
-        button = WebDriverWait(driver, 3).until(  # Reduced from 10 to 3 seconds
+        button = WebDriverWait(driver, 3).until(
             EC.element_to_be_clickable(
                 (By.XPATH, '//button[normalize-space()="Odrzuć wszystko"]')
             )
@@ -83,22 +60,26 @@ def dismiss_cookie_popup(driver):
         print(f"Cookie popup not found or already dismissed: {str(e)}")
 
 
-@pytest.mark.mobile
-def test_user_can_login_successfully_using_dynamic_user(driver):
-    """Test that a user can successfully log in with valid credentials"""
+def handle_popups(driver):
+    """Handle all known popups that might appear"""
+    try:
+        # Check for translation popup
+        WebDriverWait(driver, 3).until(
+            EC.presence_of_element_located(
+                (By.XPATH, '//div[contains(text(), "Przetłumaczyć")]')
+            )
+        )
+        dismiss_translation_popup(driver)
+    except:
+        print("No translation popup on frontend")
 
-    # Create user first to minimize delay between creation and usage
-    user = create_random_user_via_api()
-
-    # Navigate directly to the login page instead of going through Google first
-    login_page = LoginPage(driver)
-    login_page.navigate(BASE_URL)
-
-    # Handle any popups that might appear
-    handle_popups(driver)
-
-    # Perform login
-    login_page.login(user["email"], user["password"])
-
-    # Verify successful login
-    verify_logged_in(driver)
+    try:
+        # Check for cookie popup
+        WebDriverWait(driver, 3).until(
+            EC.presence_of_element_located(
+                (By.XPATH, '//button[normalize-space()="Odrzuć wszystko"]')
+            )
+        )
+        dismiss_cookie_popup(driver)
+    except:
+        print("No cookie popup on frontend")

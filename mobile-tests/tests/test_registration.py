@@ -4,19 +4,12 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 import pytest
-from pages.login_page import LoginPage
-from helpers.api_helpers import create_random_user_via_api
+from pages.registration_page import RegistrationPage
+from helpers.test_data import generate_random_user
 from helpers.config import BASE_URL
 from helpers.popup_handlers import handle_popups
 from helpers.assertions import verify_logged_in
-from helpers.waits import wait_for_element
-from helpers.popup_handlers import handle_popups
 from selenium.webdriver.common.by import By
-from selenium.common.exceptions import (
-    NoSuchElementException,
-    TimeoutException,
-    ElementClickInterceptedException,
-)
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
@@ -30,14 +23,14 @@ def dismiss_translation_popup(driver):
     """Dismiss the Chrome translation popup by selecting 'Never translate pages in English'"""
     try:
         # Wait for the translation popup to appear
-        popup = WebDriverWait(driver, 3).until(  # Reduced from 10 to 3 seconds
+        popup = WebDriverWait(driver, 3).until(
             EC.presence_of_element_located(
                 (By.XPATH, '//div[contains(text(), "Przetłumaczyć")]')
             )
         )
 
         # Click the gear icon
-        gear_icon = WebDriverWait(driver, 3).until(  # Reduced from 5 to 3 seconds
+        gear_icon = WebDriverWait(driver, 3).until(
             EC.element_to_be_clickable(
                 (
                     By.XPATH,
@@ -48,7 +41,7 @@ def dismiss_translation_popup(driver):
         driver.execute_script("arguments[0].click();", gear_icon)
 
         # Click "Never translate pages in English"
-        never_translate = WebDriverWait(driver, 3).until(  # Reduced from 5 to 3 seconds
+        never_translate = WebDriverWait(driver, 3).until(
             EC.element_to_be_clickable(
                 (
                     By.XPATH,
@@ -73,7 +66,7 @@ def dismiss_cookie_popup(driver):
     """Dismiss the cookie consent popup"""
     try:
         # Try to find and click "Odrzuć wszystko" button
-        button = WebDriverWait(driver, 3).until(  # Reduced from 10 to 3 seconds
+        button = WebDriverWait(driver, 3).until(
             EC.element_to_be_clickable(
                 (By.XPATH, '//button[normalize-space()="Odrzuć wszystko"]')
             )
@@ -84,21 +77,21 @@ def dismiss_cookie_popup(driver):
 
 
 @pytest.mark.mobile
-def test_user_can_login_successfully_using_dynamic_user(driver):
-    """Test that a user can successfully log in with valid credentials"""
+def test_user_can_register_via_ui(driver):
+    """Test that a new user can successfully register through the UI"""
 
-    # Create user first to minimize delay between creation and usage
-    user = create_random_user_via_api()
+    # Generate random user data
+    user = generate_random_user()
 
-    # Navigate directly to the login page instead of going through Google first
-    login_page = LoginPage(driver)
-    login_page.navigate(BASE_URL)
+    # Initialize registration page
+    registration_page = RegistrationPage(driver)
+    registration_page.navigate(BASE_URL)
 
     # Handle any popups that might appear
     handle_popups(driver)
 
-    # Perform login
-    login_page.login(user["email"], user["password"])
+    # Perform registration
+    registration_page.register(user["username"], user["email"], user["password"])
 
-    # Verify successful login
+    # Verify successful registration
     verify_logged_in(driver)
