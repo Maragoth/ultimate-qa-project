@@ -20,4 +20,4 @@ Start-Sleep -Seconds 5
 Write-Output "Starting Frontend..."
 Start-Process powershell -ArgumentList "cd react-redux-realworld-example-app; npm start"
 
-Write-Output "✅ All services are starting up!"
+Write-Output "All services are starting up!"
