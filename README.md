@@ -5,7 +5,7 @@ It combines multiple QA disciplines in a unified framework:
 
 - ✅ Web UI Testing (Playwright)
 - ✅ API Testing (Python + Pytest + JSON Schema)
-- ✅ Mobile Testing (Appium + Android Emulator)
+- ✅ Mobile Testing (Appium + Android physical device)
 - ✅ Hybrid UI + API Tests
 - ✅ CI/CD Automation (GitHub Actions, matrix builds)
 - ✅ Dockerized Database (PostgreSQL)
@@ -44,7 +44,7 @@ ultimate-qa-project/
 
 - **UI Testing**: Playwright (JavaScript/TypeScript)
 - **API Testing**: Python + Requests + Pytest + JSON Schema
-- **Mobile Testing**: Appium + Android Emulator
+- **Mobile Testing**: Appium + Android physical device
 - **CI/CD**: GitHub Actions (matrix builds, reports)
 - **Docker**: Docker (PostgreSQL DB)
 - **Reports**: Allure, pytest-html
