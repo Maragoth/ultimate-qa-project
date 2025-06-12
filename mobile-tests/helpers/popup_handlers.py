@@ -7,14 +7,14 @@ def dismiss_translation_popup(driver):
     """Dismiss the Chrome translation popup by selecting 'Never translate pages in English'"""
     try:
         # Wait for the translation popup to appear
-        popup = WebDriverWait(driver, 3).until(
+        popup = WebDriverWait(driver, 1).until(
             EC.presence_of_element_located(
                 (By.XPATH, '//div[contains(text(), "Przetłumaczyć")]')
             )
         )
 
         # Click the gear icon
-        gear_icon = WebDriverWait(driver, 3).until(
+        gear_icon = WebDriverWait(driver, 1).until(
             EC.element_to_be_clickable(
                 (
                     By.XPATH,
@@ -25,7 +25,7 @@ def dismiss_translation_popup(driver):
         driver.execute_script("arguments[0].click();", gear_icon)
 
         # Click "Never translate pages in English"
-        never_translate = WebDriverWait(driver, 3).until(
+        never_translate = WebDriverWait(driver, 1).until(
             EC.element_to_be_clickable(
                 (
                     By.XPATH,
@@ -36,7 +36,7 @@ def dismiss_translation_popup(driver):
         driver.execute_script("arguments[0].click();", never_translate)
 
         # Verify the popup is gone
-        WebDriverWait(driver, 3).until_not(
+        WebDriverWait(driver, 1).until_not(
             EC.presence_of_element_located(
                 (By.XPATH, '//div[contains(text(), "Przetłumaczyć")]')
             )
@@ -50,7 +50,7 @@ def dismiss_cookie_popup(driver):
     """Dismiss the cookie consent popup"""
     try:
         # Try to find and click "Odrzuć wszystko" button
-        button = WebDriverWait(driver, 3).until(
+        button = WebDriverWait(driver, 1).until(
             EC.element_to_be_clickable(
                 (By.XPATH, '//button[normalize-space()="Odrzuć wszystko"]')
             )
@@ -64,7 +64,7 @@ def handle_popups(driver):
     """Handle all known popups that might appear"""
     try:
         # Check for translation popup
-        WebDriverWait(driver, 3).until(
+        WebDriverWait(driver, 1).until(
             EC.presence_of_element_located(
                 (By.XPATH, '//div[contains(text(), "Przetłumaczyć")]')
             )
@@ -75,7 +75,7 @@ def handle_popups(driver):
 
     try:
         # Check for cookie popup
-        WebDriverWait(driver, 3).until(
+        WebDriverWait(driver, 1).until(
             EC.presence_of_element_located(
                 (By.XPATH, '//button[normalize-space()="Odrzuć wszystko"]')
             )

@@ -154,38 +154,42 @@ http://192.168.1.191:4100
 ```
 mobile-tests/
 ├── tests/
-│   ├── test_login.py                       # 🕒 user login flow
-│   ├── test_invalid_login.py               # 🕒 invalid login (error message)
-│   ├── test_registration.py                # 🕒 user registration flow
-│   ├── test_article_create.py              # 🕒 create a new article
-│   ├── test_article_edit.py                # 🕒 edit article content
-│   ├── test_article_readmore.py            # 🕒 open full article from preview
-│   ├── test_article_favorite.py            # 🕒 favorite/unfavorite articles
-│   ├── test_comments.py                    # 🕒 add and delete comment
-│   ├── test_article_delete.py              # 🕒 delete article
-│   ├── test_follow_unfollow.py             # 🕒 follow/unfollow author and verify feed
-│   ├── test_tag_filter_popular.py          # 🕒 filter by "Popular Tags"
-│   ├── test_tag_filter_article.py          # ⚠️ BLOCKED – tag click redirect issue
-│   ├── test_tag_popularity.py              # 🕒 new tag appears in Popular Tags
-│   ├── test_article_author_profile.py      # 🕒 click article author → profile
-│   ├── test_comment_author_profile.py      # 🕒 click comment author → profile
-│   ├── test_update_profile_info.py         # 🕒 update username, email, bio, avatar
-│   ├── test_update_password.py             # 🕒 update password and re-login
-│   ├── test_update_profile_image.py        # 🕒 update profile image and verify
-│   └── test_navigation.py                  # 🕒 navbar behavior based on login state
+│   ├── test_login.py                       ✅10x✅# user login flow
+│   ├── test_invalid_login.py               ✅10x✅# invalid login (error message)
+│   ├── test_registration.py                ✅10x✅# user registration flow
+│   ├── test_article_create.py              ✅10x✅# create a new article
+│   ├── test_article_edit.py                ✅10x✅# edit article content
+│   ├── test_article_readmore.py            ✅10x✅# open full article from preview
+│   ├── test_article_favorite.py            ✅10x✅# favorite/unfavorite articles
+│   ├── test_comments.py                    ✅10x✅# add and delete comment
+│   ├── test_article_delete.py              ✅10x✅# delete article
+│   ├── test_follow_unfollow.py             ✅10x✅# follow/unfollow author and verify feed
+│   ├── test_tag_filter_popular.py          ✅10x✅# filter by "Popular Tags"
+│   ├── test_tag_filter_article.py          ✅10x✅#⚠️ BLOCKED – tag click redirect issue
+│   ├── test_tag_popularity.py              ✅10x✅# new tag appears in Popular Tags
+│   ├── test_article_author_profile.py      ✅10x✅# click article author → profile
+│   ├── test_comment_author_profile.py      ✅10x✅# click comment author → profile
+│   ├── test_update_profile_info.py         ✅10x✅# update username, email, bio
+│   ├── test_update_password.py             ✅10x✅# update password and re-login
+│   ├── test_update_profile_image.py        ✅10x✅# update profile image and verify
+│   └── test_navigation.py                  ✅10x✅# navbar behavior based on login state
 ├── pages/
 │   ├── __init__.py
-│   ├── article_page.py                     # Article creation and management
-│   ├── login_page.py                       # Login form interactions
-│   └── registration_page.py                # User registration form
+│   ├── article_page.py                     # Article creation, editing, and interactions
+│   ├── login_page.py                       # Login form and authentication
+│   └── registration_page.py                # User registration and signup
 ├── fixtures/
 │   └── setup.py
 ├── helpers/
 │   ├── __init__.py
-│   ├── api_helpers.py                      # API interaction helpers
-│   ├── session.py                          # Session management
-│   ├── test_data.py                        # Test data and constants
-│   └── waits.py                            # Custom wait conditions
+│   ├── api_helpers.py                      # API interaction utilities
+│   ├── assertions.py                       # Custom test assertions
+│   ├── auth.py                            # Authentication helper functions
+│   ├── config.py                          # Test configuration and settings
+│   ├── popup_handlers.py                  # Handle browser popups and alerts
+│   ├── session.py                         # Browser session management
+│   ├── test_data.py                       # Test data generation and constants
+│   └── waits.py                           # Custom wait conditions
 ├── requirements.txt
 └── README.md
 ```

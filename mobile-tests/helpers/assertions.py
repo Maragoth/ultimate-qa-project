@@ -43,3 +43,58 @@ def verify_error_message(error_messages, expected_message):
     assert (
         expected_message in error_messages
     ), f"Expected error message '{expected_message}' not found in {error_messages}"
+
+
+def assert_element_present(driver, by, locator, timeout=10):
+    """Assert that an element is present and visible on the page
+
+    Args:
+        driver: The WebDriver instance
+        by: The locator strategy (e.g., AppiumBy.XPATH)
+        locator: The locator string
+        timeout: Maximum time to wait for element (default 10 seconds)
+    """
+    try:
+        WebDriverWait(driver, timeout).until(
+            EC.presence_of_element_located((by, locator))
+        )
+    except:
+        raise AssertionError(f"Element not found with locator: {locator}")
+
+
+def assert_element_not_present(driver, by, locator, timeout=10):
+    """Assert that an element is not present on the page
+
+    Args:
+        driver: The WebDriver instance
+        by: The locator strategy (e.g., AppiumBy.XPATH)
+        locator: The locator string
+        timeout: Maximum time to wait for element (default 10 seconds)
+    """
+    try:
+        WebDriverWait(driver, timeout).until_not(
+            EC.presence_of_element_located((by, locator))
+        )
+    except:
+        raise AssertionError(
+            f"Element was found but should not be present with locator: {locator}"
+        )
+
+
+def assert_element_count(driver, by, locator, expected_count, timeout=10):
+    """Assert that a specific number of elements are present on the page
+
+    Args:
+        driver: The WebDriver instance
+        by: The locator strategy (e.g., AppiumBy.XPATH)
+        locator: The locator string
+        expected_count: The expected number of elements
+        timeout: Maximum time to wait for elements (default 10 seconds)
+    """
+    elements = WebDriverWait(driver, timeout).until(
+        lambda d: d.find_elements(by, locator)
+    )
+    actual_count = len(elements)
+    assert (
+        actual_count == expected_count
+    ), f"Expected {expected_count} elements, but found {actual_count}."

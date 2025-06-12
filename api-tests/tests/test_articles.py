@@ -1,5 +1,6 @@
 import pytest
 import json
+from uuid import uuid4
 from pathlib import Path
 from utils.helpers import (
     authorized_post_request,
@@ -7,8 +8,9 @@ from utils.helpers import (
     authorized_put_request,
     authorized_delete_request,
     validate_schema,
-    log_response
+    log_response,
 )
+
 
 @pytest.mark.articles
 def test_full_article_crud(base_url, auth_token):
@@ -16,10 +18,10 @@ def test_full_article_crud(base_url, auth_token):
     url = f"{base_url}/articles"
     payload = {
         "article": {
-            "title": "QA Automation Test Article",
+            "title": f"QA Test Article {uuid4()}",
             "description": "Initial description",
             "body": "This is the initial body of the test article.",
-            "tagList": ["qa", "test", "automation"]
+            "tagList": ["qa", "test", "automation"],
         }
     }
 
@@ -27,6 +29,8 @@ def test_full_article_crud(base_url, auth_token):
     log_response(response)
 
     assert response.status_code == 201
+    assert response.elapsed.total_seconds() < 1
+
     slug = response.json()["article"]["slug"]
 
     # === GET: verify article exists ===
@@ -35,17 +39,26 @@ def test_full_article_crud(base_url, auth_token):
     log_response(response)
 
     assert response.status_code == 200
+    assert response.elapsed.total_seconds() < 1
+
     article_data = response.json()["article"]
     assert article_data["title"] == payload["article"]["title"]
     assert article_data["description"] == payload["article"]["description"]
 
+    # === Validate response schema ===
+    schema_path = Path(__file__).parent / "schemas" / "article.schema.json"
+    with open(schema_path, "r", encoding="utf-8") as f:
+        schema = json.load(f)
+
+    validate_schema(response.json(), schema)
+
     # === PUT: update article ===
     update_payload = {
         "article": {
-            "title": "QA Automation Test Article Updated",
+            "title": f"{payload['article']['title']} Updated",
             "description": "Updated description",
             "body": "Updated body content.",
-            "tagList": ["qa", "test", "updated"]
+            "tagList": ["qa", "test", "updated"],
         }
     }
 
@@ -53,6 +66,8 @@ def test_full_article_crud(base_url, auth_token):
     log_response(response)
 
     assert response.status_code == 200
+    assert response.elapsed.total_seconds() < 1
+
     updated_article = response.json()["article"]
     assert updated_article["title"] == update_payload["article"]["title"]
     assert updated_article["description"] == update_payload["article"]["description"]
@@ -72,3 +87,4 @@ def test_full_article_crud(base_url, auth_token):
     log_response(response)
 
     assert response.status_code == 404
+    assert response.elapsed.total_seconds() < 1

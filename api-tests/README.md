@@ -23,48 +23,61 @@ This folder contains automated API tests for the [RealWorld Example App](https:/
 ## ✅ Folder Structure
 ```
 api-tests/
-├── schemas/
-│ ├── article.schema.json
-│ ├── articles.schema.json
-│ ├── comment.schema.json
-│ ├── comments.schema.json
-│ ├── profile.schema.json
-│ ├── profiles.schema.json
-│ └── tags.schema.json
-├── test_auth.py
-├── test_articles.py
-├── test_comments.py
-├── test_profiles.py
-├── test_tags.py
-├── test_favorites.py
-├── test_settings.py
-└── utils/
-└── helpers.py
+├── fixtures/                    # Fixtures for reusable test data (e.g. auth token)
+│   └── auth_token.py
+├── tests/                       # All API test cases
+│   ├── schemas/                 # JSON Schemas for response validation
+│   │   ├── article.schema.json
+│   │   ├── articles.schema.json
+│   │   ├── comment.schema.json
+│   │   ├── comments.schema.json
+│   │   ├── profile.schema.json
+│   │   ├── profiles.schema.json
+│   │   └── tags.schema.json
+│   ├── test_auth.py            # Registration, login, auth errors
+│   ├── test_articles.py        # Article CRUD operations
+│   ├── test_comments.py        # Comment create/delete
+│   ├── test_profiles.py        # View/follow/unfollow profiles
+│   ├── test_tags.py            # Get available tags
+│   ├── test_favorites.py       # Favorite/unfavorite articles
+│   └── test_settings.py        # Update user settings
+├── utils/                      # Helper functions for requests, logging, schema validation
+│   └── helpers.py
+├── conftest.py                 # Global pytest configuration and fixtures
+└── README.md                   # How to run API tests
+
 ```
 
 
 ## ✅ Test Coverage
-| Test Area     | Status |
-|---------------|--------|
+| Test Area         | Status |
+|-------------------|--------|
 | User Registration | ✅ Done |
-| Articles CRUD | ✅ Done |
-| Comments CRUD | ✅ Done |
-| Profiles      | ✅ Done |
-| Tags          | ✅ Done |
-| Favorites     | ✅ Done |
-| User Settings | ✅ Done |
+| Articles CRUD     | ✅ Done |
+| Comments CRUD     | ✅ Done |
+| Profiles          | ✅ Done |
+| Tags              | ✅ Done |
+| Favorites         | ✅ Done |
+| User Settings     | ✅ Done |
 | Response Schema Validation | ✅ Done |
 | Performance Check (<1s) | ✅ Done |
+
+## ⚙️ Prerequisites
+
+- PostgreSQL DB running on `localhost:5432`
+- Backend API running on `http://localhost:3000/api`
+- Use `npm run reset-db` to clear the database before full test runs. (Optional)
+
 
 ## ✅ Run Tests
 Single test file:
 ```bash
-pytest api-tests/test_articles.py -v -s
+pytest api-tests/tests/test_articles.py -v -s
 ```
 
 All API tests:
 ```bash
-pytest api-tests/ -v -s
+pytest api-tests/tests -v -s
 ```
 ## 👤 Author
 

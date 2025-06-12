@@ -9,8 +9,10 @@ python-dotenv==1.0.1
 allure-pytest==2.14.1
 pytest-json-report==1.5.0
 
-# Mobile Testing (if you automate Appium with Python)
+# Mobile Testing
 Appium-Python-Client==3.1.0
+pytest-xdist==3.7.0
+pytest-repeat==0.9.4
 
 # Linting & Code Quality (optional but recommended)
 black==24.4.2

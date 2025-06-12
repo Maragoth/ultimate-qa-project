@@ -35,7 +35,7 @@ ui-tests/
 │   ├── tag-popularity.spec.ts     ✅100x✅ # tag from new article shows in "Popular Tags"
 │   ├── article-author-profile.spec.ts ✅100x✅ # click article author → profile
 │   ├── comment-author-profile.spec.ts ✅100x✅ # click comment author → profile
-│   ├── update-profile-info.spec.ts ✅100x✅ # update username, email, bio, and avatar
+│   ├── update-profile-info.spec.ts ✅100x✅ # update username, email, bio
 │   ├── update-password.spec.ts     ✅100x✅ # update password and login with new password
 │   ├── update-profile-image.spec.ts ✅100x✅ # update profile image URL and verify it
 │   ├── navigation.spec.ts          ✅100x✅ # navbar content based on login state

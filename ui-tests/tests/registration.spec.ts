@@ -2,13 +2,21 @@ import { test, expect } from '@playwright/test';
 import { RegistrationPage } from '../pages/RegistrationPage';
 import { generateRandomUser } from '../helpers/testData';
 
-test('User can register via UI', async ({ page }) => {
-  const registrationPage = new RegistrationPage(page);
-  const user = generateRandomUser();
+let user = generateRandomUser();
 
+test('User can register successfully', async ({ page }) => {
+  const registrationPage = new RegistrationPage(page);
   await registrationPage.navigate();
   await registrationPage.register(user.username, user.email, user.password);
+  await expect(page.locator('a.nav-link', { hasText: user.username })).toBeVisible();
+});
 
-  await expect(page).toHaveURL('http://localhost:4100/');
-  await expect(page.locator('text=Your Feed')).toBeVisible({ timeout: 10000 });
+test('Should show error for invalid email', async ({ page }) => {
+  const registrationPage = new RegistrationPage(page);
+  await registrationPage.navigate();
+  await registrationPage.register(user.username, 'invalidemail.com', user.password);
+  const emailInput = page.locator('input[placeholder="Email"]');
+  await emailInput.fill('invalidemail.com');
+  const isValid = await emailInput.evaluate((el) => (el as HTMLInputElement).checkValidity());
+  expect(isValid).toBe(false);
 });

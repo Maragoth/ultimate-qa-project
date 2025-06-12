@@ -6,8 +6,9 @@ __pycache__/
 .Python
 venv/
 ENV/
+*.sqlite3
 
-# IDE
+# IDE & Editor
 .idea/
 .vscode/
 *.swp
@@ -15,8 +16,34 @@ ENV/
 
 # Logs
 *.log
+log/
+logs/
 
 # Local environment
 .env
 .env.local
 .env.*.local
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-error.log
+
+# Test & Report artifacts
+.pytest_cache/
+allure-results/
+allure-report/
+html-report/
+test-results/
+
+# Screenshots
+screenshots/
+screenshots_failed/
+screenshots_failed_steps/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Workspace config (local only)
+*.code-workspace
