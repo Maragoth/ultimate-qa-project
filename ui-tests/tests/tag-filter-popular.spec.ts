@@ -1,35 +1,43 @@
 // ui-tests/tests/tag-filter-popular.spec.ts
 
 import { test, expect } from '@playwright/test';
-import { createRandomUserViaAPI } from '../helpers/apiHelpers';
+import { createRandomUserViaAPI, createArticleViaAPI } from '../helpers/apiHelpers';
 import { setupUserSession } from '../helpers/sessionHelpers';
+import { generateArticle } from '../helpers/testData';
 
-test('Click tag in sidebar and verify articles contain that tag', async ({ page, browser }) => {
+test('Click tag in sidebar and verify articles contain that tag', async ({ browser }) => {
+  // Step 1: Start new browser context and create user
   const context = await browser.newContext();
-  const newPage = await context.newPage();
-
+  const page = await context.newPage();
   const user = await createRandomUserViaAPI();
-  await createRandomUserViaAPI();
   await setupUserSession(page, user.token, user.username);
 
+  // Step 2: Generate article with unique tag and create it via API
+  const article = generateArticle('SidebarTag', `Tag-${Math.floor(Math.random() * 1000000)}`);
+  const tag = article.tagList[0];
+  await createArticleViaAPI(user.token, article);
 
-  await newPage.goto('http://localhost:4100/');
+  // Step 3: Visit homepage and wait for tag to appear
+  await page.goto('http://localhost:4100/');
+  await expect(page.locator(`.tag-list >> text=${tag}`)).toBeVisible({ timeout: 5000 });
 
-  const popularTag = newPage.locator('.tag-list a').first();
-  const tagName = (await popularTag.textContent())?.trim();
-  await popularTag.click();
+  // Step 4: Click on tag in sidebar
+  await page.locator(`.tag-list >> text=${tag}`).click();
 
-  await expect(newPage.locator('.feed-toggle')).toContainText(tagName!);
+  // Step 5: Verify selected tag is active in feed toggle
+  await expect(page.locator('.feed-toggle')).toContainText(tag);
 
-  const articles = newPage.locator('.article-preview');
+  // Step 6: Verify articles contain the selected tag
+  const articles = page.locator('.article-preview');
   const count = await articles.count();
   expect(count).toBeGreaterThan(0);
 
   for (let i = 0; i < count; i++) {
     const tags = await articles.nth(i).locator('ul.tag-list li').allTextContents();
     const cleanedTags = tags.map(t => t.trim());
-    expect(cleanedTags.includes(tagName)).toBe(true);
+    expect(cleanedTags.includes(tag)).toBe(true);
   }
 
+  // Step 7: Cleanup
   await context.close();
 });
