@@ -13,15 +13,16 @@ import time
 def test_article_favorite_flow(driver):
     """Test favoriting and unfavoriting an article from profile"""
 
-    # Create test user and article via API
+    # Step 1: Create a test user and article using API
     user = create_random_user_via_api()
     article = generate_article("Favorite", f"Tag-{int(time.time())}")
     create_article_via_api(user["token"], article)
 
-    # Login and navigate to Global Feed
+    # Step 2: Log in as the test user and navigate to the frontend
     login_via_api_and_set_token(driver, user)
     driver.get(f'http://{HOST_CONFIG["FRONTEND_HOST"]}:{HOST_CONFIG["FRONTEND_PORT"]}')
 
+    # Step 3: Click on 'Global Feed' tab to load public articles
     wait_for_element(
         driver,
         (
@@ -31,7 +32,7 @@ def test_article_favorite_flow(driver):
         timeout=3,
     ).click()
 
-    # Find and favorite the article
+    # Step 4: Locate the created article and click the heart icon to favorite it
     article_preview = wait_for_element(
         driver,
         (
@@ -44,39 +45,39 @@ def test_article_favorite_flow(driver):
         AppiumBy.XPATH, ".//button[.//i[contains(@class, 'ion-heart')]]"
     ).click()
 
-    # Navigate to favorited articles
+    # Step 5: Navigate to user's profile and open 'Favorited Articles' tab
     wait_for_element(
-        driver, (AppiumBy.XPATH, f"//a[contains(@href, '@{user["username"]}')]")
+        driver, (AppiumBy.XPATH, f"//a[contains(@href, '@{user['username']}')]")
     ).click()
     wait_for_element(
         driver, (AppiumBy.XPATH, "//a[contains(text(), 'Favorited Articles')]")
     ).click()
 
-    # Verify article appears in favorited list
+    # Step 6: Assert that the favorited article appears in the list
     assert_element_present(
         driver,
         AppiumBy.XPATH,
-        f"//div[contains(@class, 'article-preview') and .//h1[contains(text(), '{article["title"]}')]]",
+        f"//div[contains(@class, 'article-preview') and .//h1[contains(text(), '{article['title']}')]]",
         timeout=3,
     )
 
-    # Unfavorite the article
+    # Step 7: Click the heart icon again to unfavorite the article
     wait_for_element(
         driver,
         (
             AppiumBy.XPATH,
-            f"//div[contains(@class, 'article-preview') and .//h1[contains(text(), '{article["title"]}')]]",
+            f"//div[contains(@class, 'article-preview') and .//h1[contains(text(), '{article['title']}')]]",
         ),
         timeout=3,
     ).find_element(
         AppiumBy.XPATH, ".//button[.//i[contains(@class, 'ion-heart')]]"
     ).click()
 
-    # Refresh and verify article is removed
+    # Step 8: Refresh the page and confirm the article is no longer in favorites
     driver.refresh()
     assert_element_not_present(
         driver,
         AppiumBy.XPATH,
-        f"//div[contains(@class, 'article-preview') and .//h1[contains(text(), '{article["title"]}')]]",
+        f"//div[contains(@class, 'article-preview') and .//h1[contains(text(), '{article['title']}')]]",
         timeout=3,
     )

@@ -19,30 +19,32 @@ logging.basicConfig(
 @pytest.mark.mobile
 def test_user_can_delete_article(driver):
     """Test that a logged-in user can delete their article"""
-    # Create user and article via API
+
+    # Step 1: Create a test user and article via API for deletion scenario
     user = create_random_user_via_api()
     article = generate_article("Delete-Test", f"TestTag-{random.randint(0, 999999)}")
     created_article = create_article_via_api(user["token"], article)
 
-    # Login and navigate to article
+    # Step 2: Login using token injection and navigate directly to the article page
     login_via_api_and_set_token(driver, user)
     driver.get(f"{BASE_URL}/article/{created_article['slug']}")
 
-    # Verify we're on the correct article page
+    # Step 3: Verify that the article title matches the one created
     article_title = wait_for_element(driver, (AppiumBy.TAG_NAME, "h1"), timeout=3).text
     assert (
         article_title == article["title"]
     ), f"Wrong article page. Expected '{article['title']}', got '{article_title}'"
 
-    # Delete the article
+    # Step 4: Perform article deletion using page object method
     article_page = ArticlePage(driver)
     article_page.delete_article()
 
-    # Quick check that article is gone from feed
+    # Step 5: Navigate back to Global Feed to confirm the article was removed
     wait_for_element(
         driver, (AppiumBy.XPATH, "//a[normalize-space()='Global Feed']"), timeout=1
     ).click()
 
+    # Step 6: Assert that the deleted article no longer appears in the feed
     assert (
         len(
             driver.find_elements(

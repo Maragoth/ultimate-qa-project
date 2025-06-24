@@ -13,12 +13,12 @@ import time
 def test_article_author_profile(driver):
     """Test that verifies navigation to the author's profile and their articles on mobile"""
 
-    # Step 1: Create user via API
+    # Step 1: Create a new user via API for authentication and article ownership
     start = time.time()
     user = create_random_user_via_api()
     print(f"Step 1: Create user via API – {time.time() - start:.2f}s")
 
-    # Step 2: Create article via API
+    # Step 2: Create an article using the newly created user's token
     start = time.time()
     create_article_via_api(
         user["token"],
@@ -26,13 +26,13 @@ def test_article_author_profile(driver):
     )
     print(f"Step 2: Create article via API – {time.time() - start:.2f}s")
 
-    # Step 3: Login and navigate
+    # Step 3: Login as the created user and navigate to the frontend URL
     start = time.time()
     login_via_api_and_set_token(driver, user)
     driver.get(f'http://{HOST_CONFIG["FRONTEND_HOST"]}:{HOST_CONFIG["FRONTEND_PORT"]}')
     print(f"Step 3: Login and navigate – {time.time() - start:.2f}s")
 
-    # Step 4: Click Global Feed
+    # Step 4: Click the 'Global Feed' tab to load all articles
     start = time.time()
     wait_for_element(
         driver,
@@ -44,12 +44,12 @@ def test_article_author_profile(driver):
     ).click()
     print(f"Step 4: Click Global Feed – {time.time() - start:.2f}s")
 
-    # Step 5: Click first article title
+    # Step 5: Click on the first article title to open the article
     start = time.time()
     wait_for_element(driver, (AppiumBy.XPATH, "//h1"), timeout=5).click()
     print(f"Step 5: Click first article – {time.time() - start:.2f}s")
 
-    # Step 6: Click author's name
+    # Step 6: Click the author's name link from the article view
     start = time.time()
     author_element = wait_for_element(
         driver,
@@ -60,7 +60,7 @@ def test_article_author_profile(driver):
     author_element.click()
     print(f"Step 6: Click author – {time.time() - start:.2f}s")
 
-    # Step 7: Verify profile page loaded with correct author name
+    # Step 7: Verify the author's profile page is loaded and name is displayed
     start = time.time()
     wait_for_element(
         driver,
@@ -69,7 +69,7 @@ def test_article_author_profile(driver):
     )
     print(f"Step 7: Verify profile loaded – {time.time() - start:.2f}s")
 
-    # Step 8: Verify 'My Articles' tab is active
+    # Step 8: Check that 'My Articles' tab is active on the profile
     start = time.time()
     wait_for_element(
         driver,
@@ -81,14 +81,14 @@ def test_article_author_profile(driver):
     )
     print(f"Step 8: Verify 'My Articles' active – {time.time() - start:.2f}s")
 
-    # Step 9: Verify at least one article is visible
+    # Step 9: Assert that at least one article preview is present on the profile
     start = time.time()
     assert_element_present(
         driver, AppiumBy.XPATH, "//div[contains(@class, 'article-preview')]"
     )
     print(f"Step 9: Assert articles visible – {time.time() - start:.2f}s")
 
-    # Step 10: Verify article author matches
+    # Step 10: Ensure that the author's name appears under the article preview
     start = time.time()
     author_in_list = wait_for_element(
         driver,

@@ -17,22 +17,23 @@ logging.basicConfig(
 @pytest.mark.mobile
 def test_user_can_add_and_delete_comment(driver):
     """Test that a user can add and delete a comment on an article"""
+
     print("\nStarting comment test...")
 
-    # Create user and article via API
+    # Step 1: Create a user and article via API
     start_time = time.time()
     user = create_random_user_via_api()
     article = generate_article("Comment Test", f"Tag-{int(time.time())}")
     created_article = create_article_via_api(user["token"], article)
     print(f"User and article creation via API took: {time.time() - start_time:.2f}s")
 
-    # Login via API and navigate directly to article
+    # Step 2: Log in via token and navigate directly to the article page
     start_time = time.time()
     login_via_api_and_set_token(driver, user)
     driver.get(f"{BASE_URL}/article/{created_article['slug']}")
     print(f"Login and navigation took: {time.time() - start_time:.2f}s")
 
-    # Add comment
+    # Step 3: Add a comment to the article using the comment input field
     start_time = time.time()
     comment_text = f"Test comment {int(time.time())}"
     comment_box = wait_for_element(
@@ -50,14 +51,14 @@ def test_user_can_add_and_delete_comment(driver):
     post_button.click()
     print(f"Comment posting took: {time.time() - start_time:.2f}s")
 
-    # Verify comment appears
+    # Step 4: Verify that the comment appears in the comment list
     start_time = time.time()
     comment = wait_for_element(
         driver, (AppiumBy.XPATH, f"//p[contains(text(), '{comment_text}')]"), timeout=3
     )
     print(f"Comment verification took: {time.time() - start_time:.2f}s")
 
-    # Delete comment
+    # Step 5: Click the trash icon to delete the comment
     start_time = time.time()
     delete_button = wait_for_element(
         driver,
@@ -70,7 +71,7 @@ def test_user_can_add_and_delete_comment(driver):
     delete_button.click()
     print(f"Comment deletion took: {time.time() - start_time:.2f}s")
 
-    # Verify comment is removed
+    # Step 6: Ensure the comment no longer exists on the page
     start_time = time.time()
     try:
         driver.find_element(AppiumBy.XPATH, f"//p[contains(text(), '{comment_text}')]")

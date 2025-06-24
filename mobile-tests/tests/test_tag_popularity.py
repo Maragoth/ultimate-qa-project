@@ -14,12 +14,12 @@ import time
 def test_tag_popularity_feature(driver):
     """Test that verifies the tag popularity feature on mobile"""
 
-    # Step 1: Create user via API
+    # Step 1: Create a user using the API
     start = time.time()
     user = create_random_user_via_api()
     print(f"Step 1: Create user via API – {time.time() - start:.2f}s")
 
-    # Step 2: Create articles via API
+    # Step 2: Create two articles with the same tag to increase its popularity
     tag = "PopularTagXYZ"
     start = time.time()
     create_article_via_api(
@@ -32,13 +32,13 @@ def test_tag_popularity_feature(driver):
     )
     print(f"Step 2: Create articles via API – {time.time() - start:.2f}s")
 
-    # Step 3: Login and navigate
+    # Step 3: Log in and navigate to the homepage
     start = time.time()
     login_via_api_and_set_token(driver, user)
     driver.get(f'http://{HOST_CONFIG["FRONTEND_HOST"]}:{HOST_CONFIG["FRONTEND_PORT"]}')
     print(f"Step 3: Login and navigate – {time.time() - start:.2f}s")
 
-    # Step 4: Click Global Feed
+    # Step 4: Click the Global Feed tab to load articles
     start = time.time()
     wait_for_element(
         driver,
@@ -52,7 +52,7 @@ def test_tag_popularity_feature(driver):
 
     home_page = HomePage(driver)
 
-    # Step 5: Scroll repeatedly until Popular Tags is found (scroll more per step)
+    # Step 5: Scroll until the Popular Tags section becomes visible
     start = time.time()
     found = False
     for i in range(8):
@@ -70,7 +70,7 @@ def test_tag_popularity_feature(driver):
 
     assert found, "Popular Tags section not found after scrolling"
 
-    # Step 6: Ensure tag is clickable before clicking
+    # Step 6: Click the tag from the Popular Tags section
     start = time.time()
     tag_element = wait_for_element_clickable(
         driver,
@@ -83,7 +83,7 @@ def test_tag_popularity_feature(driver):
     tag_element.click()
     print(f"Step 6: Click tag – {time.time() - start:.2f}s")
 
-    # Step 7: Verify active tab reflects the tag filter
+    # Step 7: Verify that the selected tag is active in the feed toggle nav
     start = time.time()
     wait_for_element(
         driver,
@@ -95,14 +95,14 @@ def test_tag_popularity_feature(driver):
     )
     print(f"Step 7: Tag is active in nav – {time.time() - start:.2f}s")
 
-    # Step 8: Assert articles are visible
+    # Step 8: Assert that article previews are visible
     start = time.time()
     assert_element_present(
         driver, AppiumBy.XPATH, "//div[contains(@class, 'article-preview')]"
     )
     print(f"Step 8: Assert articles visible – {time.time() - start:.2f}s")
 
-    # Step 9: Count articles
+    # Step 9: Assert exactly 2 articles are shown for the selected tag
     start = time.time()
     assert_element_count(
         driver, AppiumBy.XPATH, "//div[contains(@class, 'article-preview')]", 2

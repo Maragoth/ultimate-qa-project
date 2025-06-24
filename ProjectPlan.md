@@ -20,11 +20,16 @@ It includes fully automated testing across Web UI, API, Mobile, and hybrid layer
 ## 🛡️ Test Strategy
 
 ### API Testing (Python + Pytest + JSON Schema)
-- Authentication & Token handling
+- Authentication & Token handling (valid, expired, missing, malformed tokens)
 - CRUD operations for Users, Articles, Comments
-- Negative test scenarios (4xx, 5xx responses)
+- Negative test scenarios (4xx, 5xx responses, malformed JSON, unsupported methods)
+- Input validation: boundary values, special characters (e.g. emoji, ł, ç)
+- Dependency rules (e.g. deleting article deletes related comments)
+- Partial updates (e.g. PATCH-style PUT /user with subset of fields)
 - JSON Schema validation of API responses
 - Response time assertions (<1000ms)
+- Stability checks: schema drift, data consistency
+
 
 ### UI Testing (Playwright)
 - Full end-to-end user flows: login, registration, article creation, editing, deletion
@@ -105,6 +110,29 @@ ultimate-qa-project/
 - [✅] Profile Follow/Unfollow
 - [✅] Schema validation for API responses
 - [✅] Response time <1000ms
+
+📝 Authentication Suite
+- [✅] Expired or malformed JWT returns 401
+- [✅] Missing Authorization header returns 401
+- [✅] Reused or tampered token is rejected
+
+📝 Input Validation Suite
+- [✅] Malformed JSON returns 400
+- [✅] Boundary input values for title, bio, username
+- [✅] Unicode & special characters are processed correctly
+- [✅] Unsupported HTTP methods return 405
+
+📝 Data Integrity Suite
+- [ ] Freshly created resource is immediately consistent
+- [ ] Deleting parent (article) removes related comments
+
+📝 Schema & Response Suite
+- [ ] JSON Schema strictly matches response body
+- [ ] No unexpected fields in production responses
+
+📝 Partial Update Suite
+- [ ] PUT /user with partial fields updates only what's provided
+
 
 ### 🖥️📱 UI Tests (Desktop + Mobile)
 - [✅] User login flow: Verify successful login with valid credentials.

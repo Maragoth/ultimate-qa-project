@@ -12,12 +12,12 @@ from env import HOST_CONFIG
 def test_update_password(driver):
     """Test that verifies updating user password from mobile"""
 
-    # Step 1: Create user via API
+    # Step 1: Create a test user via API
     start = time.time()
     user = create_random_user_via_api()
     print(f"Step 1: Create user via API – {time.time() - start:.2f}s")
 
-    # Step 2: Login via API and navigate to settings
+    # Step 2: Log in and navigate to the settings page
     start = time.time()
     login_via_api_and_set_token(driver, user)
     driver.get(
@@ -25,7 +25,7 @@ def test_update_password(driver):
     )
     print(f"Step 2: Login and navigate to settings – {time.time() - start:.2f}s")
 
-    # Step 3: Update password
+    # Step 3: Update the password using the settings form
     start = time.time()
     new_password = "NewPass123!"
     password_field = wait_for_element(
@@ -40,14 +40,14 @@ def test_update_password(driver):
     update_button.click()
     print(f"Step 3: Submit updated password – {time.time() - start:.2f}s")
 
-    # Step 4: Navigate again to settings page (after redirect to home)
+    # Step 4: Navigate again to the settings page after redirect
     start = time.time()
     driver.get(
         f"http://{HOST_CONFIG['FRONTEND_HOST']}:{HOST_CONFIG['FRONTEND_PORT']}/settings"
     )
     print(f"Step 4: Revisit settings – {time.time() - start:.2f}s")
 
-    # Step 5: Logout via settings page
+    # Step 5: Logout using the logout button
     start = time.time()
     logout_button = wait_for_element_clickable(
         driver,
@@ -56,7 +56,7 @@ def test_update_password(driver):
     logout_button.click()
     print(f"Step 5: Logout – {time.time() - start:.2f}s")
 
-    # Step 6: Login with updated password
+    # Step 6: Attempt login using the new password
     start = time.time()
     login_url = (
         f"http://{HOST_CONFIG['FRONTEND_HOST']}:{HOST_CONFIG['FRONTEND_PORT']}/login"
@@ -78,7 +78,7 @@ def test_update_password(driver):
     sign_in_button.click()
     print(f"Step 6: Login with new password – {time.time() - start:.2f}s")
 
-    # Step 7: Verify user is logged in
+    # Step 7: Verify successful login by checking for profile link
     start = time.time()
     profile_link_xpath = (
         f"//a[contains(@href, '/@') and contains(text(), '{user['username']}')]"

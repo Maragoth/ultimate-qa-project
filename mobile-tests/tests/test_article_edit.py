@@ -17,25 +17,25 @@ logging.basicConfig(
 def test_user_can_edit_article(driver):
     """Test that a logged-in user can edit an existing article"""
 
-    # Create user and article via API
+    # Step 1: Create a user for authentication
     user = create_random_user_via_api()
     tag = f"TestTag-{random.randint(0, 999999)}"
 
-    # Generate original and updated article data
+    # Step 2: Generate original and updated article content
     original_article = generate_article("Edit-Original", tag)
     updated_article = generate_article("Edit-Updated", tag)
 
-    # Create article via API and login
+    # Step 3: Create the original article and authenticate the user in browser
     created_article = create_article_via_api(user["token"], original_article)
     login_via_api_and_set_token(driver, user)
 
-    # Initialize article page
+    # Step 4: Initialize the article page object
     article_page = ArticlePage(driver)
 
-    # Navigate directly to the article using its slug
+    # Step 5: Navigate directly to the article page using its unique slug
     driver.get(f"{BASE_URL}/article/{created_article['slug']}")
 
-    # Edit the article
+    # Step 6: Enter article edit mode and update the content
     article_page.click_edit_button()
     article_page.edit_article(
         updated_article["title"],
@@ -43,5 +43,5 @@ def test_user_can_edit_article(driver):
         updated_article["body"],
     )
 
-    # Verify article was updated
+    # Step 7: Assert that the article title reflects the new changes
     assert article_page.get_article_title() == updated_article["title"]

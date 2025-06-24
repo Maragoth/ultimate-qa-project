@@ -12,12 +12,12 @@ from env import HOST_CONFIG
 def test_update_profile_image(driver):
     """Test that verifies updating user profile image from mobile"""
 
-    # Step 1: Create user via API
+    # Step 1: Create a user using the API
     start = time.time()
     user = create_random_user_via_api()
     print(f"Step 1: Create user via API – {time.time() - start:.2f}s")
 
-    # Step 2: Login via API and navigate to settings
+    # Step 2: Log in and navigate to the settings page
     start = time.time()
     login_via_api_and_set_token(driver, user)
     driver.get(
@@ -25,7 +25,7 @@ def test_update_profile_image(driver):
     )
     print(f"Step 2: Login and navigate to settings – {time.time() - start:.2f}s")
 
-    # Step 3: Update profile image URL
+    # Step 3: Update the profile image URL in the settings form
     start = time.time()
     image_url = "https://evek.one/4432-large_default/test.jpg"
     image_field = wait_for_element(
@@ -40,13 +40,13 @@ def test_update_profile_image(driver):
     update_button.click()
     print(f"Step 3: Submit updated image URL – {time.time() - start:.2f}s")
 
-    # Step 4: Navigate to user profile page to verify image
+    # Step 4: Navigate to the user's public profile page
     start = time.time()
     profile_url = f"http://{HOST_CONFIG['FRONTEND_HOST']}:{HOST_CONFIG['FRONTEND_PORT']}/@{user['username']}"
     driver.get(profile_url)
     print(f"Step 4: Navigate to profile – {time.time() - start:.2f}s")
 
-    # Step 5: Verify image is updated
+    # Step 5: Verify that the updated image is visible on the profile
     start = time.time()
     profile_image = wait_for_element(
         driver, (AppiumBy.XPATH, f"//img[@src='{image_url}']")

@@ -20,21 +20,21 @@ def test_tag_filter_article(driver):
     - Bug documented in docs/bug-tag-click-redirect/
     """
 
-    # Create test user and set up session
+    # Step 1: Create a test user and set up session using token
     user = create_random_user_via_api()
     setup_user_session(driver, user["token"], user["username"])
 
-    # Generate unique tag
+    # Step 2: Generate a unique tag for test isolation
     tag = f"Tag-{random_number()}"
 
-    # Create two articles with the same tag via API
+    # Step 3: Create two articles with the same tag via API
     article1_data = generate_article("Tagged-Article-A", tag)
     article2_data = generate_article("Tagged-Article-B", tag)
 
     article1 = create_article_via_api(user["token"], article1_data)
     article2 = create_article_via_api(user["token"], article2_data)
 
-    # Navigate to Global Feed
+    # Step 4: Navigate to the frontend and click on Global Feed
     frontend_url = f"http://{os.environ['FRONTEND_HOST']}:{os.environ['FRONTEND_PORT']}"
     driver.get(frontend_url)
 
@@ -43,7 +43,7 @@ def test_tag_filter_article(driver):
     )
     global_feed.click()
 
-    # Find article and click its tag
+    # Step 5: Locate article preview and find its tag element
     article_preview = wait_for_element(
         driver,
         (
@@ -52,7 +52,7 @@ def test_tag_filter_article(driver):
         ),
     )
 
-    # Click the tag using the exact HTML structure
+    # Step 6: Click the tag element that should filter the feed
     tag_element = wait_for_element_clickable(
         driver,
         (
@@ -62,9 +62,7 @@ def test_tag_filter_article(driver):
     )
     tag_element.click()
 
-    # What should happen (but currently doesn't due to the bug):
-    # The page should show the tag filter view with:
-    # 1. Active nav link showing the tag
+    # Step 7: Expect the tag to appear as an active filter (fails due to known issue)
     tag_nav = wait_for_element(
         driver,
         (
@@ -73,14 +71,14 @@ def test_tag_filter_article(driver):
         ),
     )
 
-    # 2. Article previews section should show both articles with this tag
+    # Step 8: Expect two article previews to be shown for that tag
     article_previews = driver.find_elements(AppiumBy.CLASS_NAME, "article-preview")
 
-    # These assertions will fail due to the known bug
+    # Step 9: Assertions (known to fail due to bug)
     assert tag_nav.is_displayed(), "Tag should be shown as active filter in nav"
     assert len(article_previews) == 2, "Should show both articles with the tag"
 
-    # 3. Verify the specific articles are shown
+    # Step 10: Assert both specific articles are visible in feed
     article1_element = wait_for_element(
         driver, (AppiumBy.XPATH, f"//h1[contains(text(), '{article1['title']}')]")
     )

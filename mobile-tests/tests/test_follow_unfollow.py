@@ -19,9 +19,10 @@ from helpers.waits import wait_for_element
 @pytest.mark.mobile
 def test_user_can_follow_unfollow_and_see_feed_changes(driver):
     """Test that a user can follow/unfollow another user and see feed changes"""
+
     print("\n=== Starting Follow/Unfollow Test ===")
 
-    # Create author (userB) and their article
+    # Step 1: Create the author (userB) and their article via API
     print("\n1. Creating author and article...")
     start_time = time.time()
     author = create_random_user_via_api()
@@ -32,7 +33,7 @@ def test_user_can_follow_unfollow_and_see_feed_changes(driver):
     print(f"   ✓ Created article: '{article['title']}'")
     print(f"   ⏱️  Setup took: {time.time() - start_time:.2f}s")
 
-    # Create follower (userA) and login
+    # Step 2: Create the follower (userA) and log in via token
     print("\n2. Creating follower and logging in...")
     start_time = time.time()
     follower = create_random_user_via_api()
@@ -42,14 +43,14 @@ def test_user_can_follow_unfollow_and_see_feed_changes(driver):
     print("   ✓ Logged in via API")
     print(f"   ⏱️  Setup took: {time.time() - start_time:.2f}s")
 
-    # Follow author via API for stability
+    # Step 3: Use API to follow the author (stabilizes the feed behavior)
     print("\n3. Following author...")
     start_time = time.time()
     follow_user_via_api(follower["token"], author["username"])
     print(f"   ✓ Followed {author['username']}")
     print(f"   ⏱️  API call took: {time.time() - start_time:.2f}s")
 
-    # Go to Your Feed and verify article appears
+    # Step 4: Go to 'Your Feed' and confirm article appears
     print("\n4. Checking Your Feed for article...")
     start_time = time.time()
     driver.get(f"{BASE_URL}/")
@@ -62,7 +63,7 @@ def test_user_can_follow_unfollow_and_see_feed_changes(driver):
     your_feed.click()
     print("   ✓ Clicked Your Feed")
 
-    # Poll feed until article appears (max 10 attempts)
+    # Step 5: Poll API until article appears in feed (max 10 attempts)
     article_found = False
     attempts = 0
     print("\n   Polling feed for article...")
@@ -81,14 +82,14 @@ def test_user_can_follow_unfollow_and_see_feed_changes(driver):
     ), f"Article '{article['title']}' not found in feed after following author"
     print(f"   ⏱️  Verification took: {time.time() - start_time:.2f}s")
 
-    # Unfollow author via API
+    # Step 6: Use API to unfollow the author
     print("\n5. Unfollowing author...")
     start_time = time.time()
     unfollow_user_via_api(follower["token"], author["username"])
     print(f"   ✓ Unfollowed {author['username']}")
     print(f"   ⏱️  API call took: {time.time() - start_time:.2f}s")
 
-    # Verify article disappears from Your Feed
+    # Step 7: Reopen 'Your Feed' and confirm article is gone
     print("\n6. Verifying article is gone...")
     start_time = time.time()
     driver.get(f"{BASE_URL}/")
@@ -101,7 +102,7 @@ def test_user_can_follow_unfollow_and_see_feed_changes(driver):
     your_feed.click()
     print("   ✓ Clicked Your Feed")
 
-    # Quick check that article is gone
+    # Step 8: Assert the article no longer appears in feed
     articles = driver.find_elements(
         AppiumBy.XPATH, f"//h1[contains(text(), '{article['title']}')]"
     )

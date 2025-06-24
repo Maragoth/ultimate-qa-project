@@ -1,6 +1,7 @@
 import sys
 import os
 
+# Add parent directory to sys.path to allow module imports
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 import pytest
@@ -14,13 +15,13 @@ from helpers.assertions import verify_logged_in
 def test_user_can_register_via_ui(driver):
     """Test that a new user can successfully register through the UI"""
 
-    # Generate random user data
+    # Step 1: Generate unique user credentials
     user = generate_random_user()
 
-    # Initialize registration page and perform registration
+    # Step 2: Navigate to the registration page and submit the form
     registration_page = RegistrationPage(driver)
     registration_page.navigate(BASE_URL)
     registration_page.register(user["username"], user["email"], user["password"])
 
-    # Verify successful registration
+    # Step 3: Verify that the user is logged in after registration
     verify_logged_in(driver)

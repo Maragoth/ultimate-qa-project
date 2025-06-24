@@ -10,11 +10,11 @@ It simulates a real user interacting with the **mobile version of the RealWorld 
 * Connect your Android device via USB (enable USB debugging)
 * Open mobile browser (e.g., Chrome) with `http://<your-computer-ip>:4100` (e.g., `http://192.168.1.191:4100`)
 * Make sure your phone and computer are on the same WiFi network
-* Perform basic smoke tests using Appium:
-
-  * Login form interactions
-  * Article navigation
-  * Basic visual checks
+* Perform functional and regression tests using Appium:
+  * Login and registration flows
+  * Article creation, editing, deletion
+  * Comments, favorites, profile updates
+  * Navigation and tag filtering behavior
 
 ---
 
@@ -142,9 +142,9 @@ http://192.168.1.191:4100
      }
      ```
 
-3. Run the tests from root project folder:
+3. Run the tests from root project folder: ultimate-qa-project/
    ```bash
-   pytest mobile-tests/
+   pytest mobile-tests/tests/
    ```
 
 ---
@@ -165,7 +165,7 @@ mobile-tests/
 │   ├── test_article_delete.py              ✅10x✅# delete article
 │   ├── test_follow_unfollow.py             ✅10x✅# follow/unfollow author and verify feed
 │   ├── test_tag_filter_popular.py          ✅10x✅# filter by "Popular Tags"
-│   ├── test_tag_filter_article.py          ✅10x✅#⚠️ BLOCKED – tag click redirect issue
+│   ├── test_tag_filter_article.py          ✅10x✅# ⚠️ BLOCKED – known bug: (tracked in docs/bug-tag-click-redirect/)
 │   ├── test_tag_popularity.py              ✅10x✅# new tag appears in Popular Tags
 │   ├── test_article_author_profile.py      ✅10x✅# click article author → profile
 │   ├── test_comment_author_profile.py      ✅10x✅# click comment author → profile
@@ -179,18 +179,19 @@ mobile-tests/
 │   ├── login_page.py                       # Login form and authentication
 │   └── registration_page.py                # User registration and signup
 ├── fixtures/
-│   └── setup.py
+│   └── setup.py                            # Test fixtures and setup logic
 ├── helpers/
 │   ├── __init__.py
 │   ├── api_helpers.py                      # API interaction utilities
 │   ├── assertions.py                       # Custom test assertions
-│   ├── auth.py                            # Authentication helper functions
-│   ├── config.py                          # Test configuration and settings
-│   ├── popup_handlers.py                  # Handle browser popups and alerts
-│   ├── session.py                         # Browser session management
-│   ├── test_data.py                       # Test data generation and constants
-│   └── waits.py                           # Custom wait conditions
-├── requirements.txt
+│   ├── auth.py                             # Authentication helper functions
+│   ├── config.py                           # Test configuration and settings
+│   ├── popup_handlers.py                   # Handle browser popups and alerts
+│   ├── session.py                          # Browser session management
+│   ├── test_data.py                        # Test data generation and constants
+│   └── waits.py                            # Custom wait conditions
+├── requirements.txt                        # Python dependencies for mobile tests
+├── TestSummary.md                          # Test Summary for mobile-tests
 └── README.md
 ```
 

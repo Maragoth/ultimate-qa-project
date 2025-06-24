@@ -16,12 +16,12 @@ from env import HOST_CONFIG
 def test_update_profile_info(driver):
     """Test that verifies updating user profile info from mobile"""
 
-    # Step 1: Create user via API
+    # Step 1: Create a user via API
     start = time.time()
     user = create_random_user_via_api()
     print(f"Step 1: Create user via API – {time.time() - start:.2f}s")
 
-    # Step 2: Login via API and navigate to settings
+    # Step 2: Log in and navigate to the settings page
     start = time.time()
     login_via_api_and_set_token(driver, user)
     driver.get(
@@ -29,7 +29,7 @@ def test_update_profile_info(driver):
     )
     print(f"Step 2: Login and navigate to settings – {time.time() - start:.2f}s")
 
-    # Step 3: Update username, bio and email
+    # Step 3: Fill in new values for username, bio, and email
     start = time.time()
     new_username = f"{user['username']}_upd"
     new_bio = "This is my updated bio"
@@ -53,7 +53,7 @@ def test_update_profile_info(driver):
     email_field.send_keys(new_email)
     time.sleep(0.1)
 
-    # Trigger blur events to ensure frontend registers the change
+    # Step 4: Trigger blur events to ensure React state updates
     driver.execute_script("arguments[0].blur()", username_field)
     driver.execute_script("arguments[0].blur()", bio_field)
     driver.execute_script("arguments[0].blur()", email_field)
@@ -64,17 +64,16 @@ def test_update_profile_info(driver):
     update_button.click()
 
     wait_for_url_contains(driver, "/")  # Wait for redirect after update
-
     print(f"Step 3: Submit updated settings – {time.time() - start:.2f}s")
 
-    # Step 4: Navigate again to settings page to force DOM update
+    # Step 5: Reload the settings page to confirm values were saved
     start = time.time()
     driver.get(
         f"http://{HOST_CONFIG['FRONTEND_HOST']}:{HOST_CONFIG['FRONTEND_PORT']}/settings"
     )
     print(f"Step 4: Revisit settings – {time.time() - start:.2f}s")
 
-    # Step 5: Verify updated values are displayed
+    # Step 6: Verify updated username, email, and bio fields
     start = time.time()
     username_value = wait_for_element(
         driver, (AppiumBy.XPATH, "//input[@placeholder='Username']")
