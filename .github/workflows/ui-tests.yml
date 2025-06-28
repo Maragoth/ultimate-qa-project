@@ -5,22 +5,27 @@ on:
     paths:
       - "ui-tests/**"
       - ".github/workflows/ui-tests.yml"
-      - "react-redux-realworld-example-app/**"
-      - "node-express-realworld-example-app/**"
-  pull_request:
-    paths:
-      - "ui-tests/**"
-      - ".github/workflows/ui-tests.yml"
-      - "react-redux-realworld-example-app/**"
-      - "node-express-realworld-example-app/**"
 
 jobs:
   ui-tests:
     runs-on: ubuntu-latest
 
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Init Git submodules
+        run: |
+          git submodule init
+          git submodule update --recursive
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -35,29 +40,43 @@ jobs:
         working-directory: node-express-realworld-example-app
         run: npm install
 
+      - name: Create .env file for backend
+        working-directory: node-express-realworld-example-app
+        run: |
+          echo "DATABASE_URL=postgresql://postgres:postgres@localhost:5432/conduit?schema=public" > .env
+          echo "JWT_SECRET=super-secret" >> .env
+          echo "NODE_ENV=development" >> .env
+
       - name: Setup backend (Prisma)
         working-directory: node-express-realworld-example-app
+        env:
+          DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/conduit?schema=public"
         run: |
           npx prisma generate
           npx prisma migrate deploy
 
       - name: Install UI test dependencies
         working-directory: ui-tests
-        run: npm install
-
-      - name: Install Playwright Browsers
-        working-directory: ui-tests
-        run: npx playwright install --with-deps
+        run: |
+          npm install
+          chmod +x node_modules/.bin/playwright || true
+          npx playwright install --with-deps
 
       - name: Start backend and frontend
         run: |
           npm run --prefix node-express-realworld-example-app start &
           sleep 5
           npm run --prefix react-redux-realworld-example-app start &
-          sleep 10
+          echo "Waiting for backend to be ready..."
+          until curl -s http://localhost:3000/api/tags > /dev/null; do
+            echo "Still waiting..."
+            sleep 2
+          done
+          echo "Backend is ready!"
 
       - name: Run UI Tests
-        run: npx playwright test ui-tests/tests --reporter html
+        working-directory: ui-tests
+        run: node_modules/.bin/playwright test tests --reporter html
 
       - name: Upload HTML Report
         uses: actions/upload-artifact@v4

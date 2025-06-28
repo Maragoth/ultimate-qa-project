@@ -31,6 +31,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Init Git submodules
+        run: |
+          git submodule init
+          git submodule update --recursive
+
       - name: Setup Python
         if: matrix.target != 'ui'
         uses: actions/setup-python@v5
@@ -49,7 +54,10 @@ jobs:
 
       - name: Setup Backend DB
         working-directory: node-express-realworld-example-app
+        env:
+          DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/conduit?schema=public"
         run: |
+          sleep 5
           npx prisma generate
           npx prisma migrate deploy
 
