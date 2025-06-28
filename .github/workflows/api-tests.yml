@@ -1,0 +1,63 @@
+name: API Tests
+
+on:
+  push:
+    paths:
+      - "api-tests/**"
+      - ".github/workflows/api-tests.yml"
+      - "requirements.txt"
+  pull_request:
+    paths:
+      - "api-tests/**"
+      - ".github/workflows/api-tests.yml"
+      - "requirements.txt"
+
+jobs:
+  api-tests:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.12
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Start Backend & DB
+        working-directory: node-express-realworld-example-app
+        run: |
+          npm install
+          npx prisma generate
+          npx prisma migrate deploy
+          npx nx serve api &
+          sleep 10
+
+      - name: Run API Tests
+        run: |
+          pytest api-tests/tests --html=test-results/api-report.html --self-contained-html
+
+      - name: Upload HTML Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: api-test-report
+          path: test-results/api-report.html

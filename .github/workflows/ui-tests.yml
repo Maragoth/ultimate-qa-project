@@ -1,0 +1,66 @@
+name: UI Tests
+
+on:
+  push:
+    paths:
+      - "ui-tests/**"
+      - ".github/workflows/ui-tests.yml"
+      - "react-redux-realworld-example-app/**"
+      - "node-express-realworld-example-app/**"
+  pull_request:
+    paths:
+      - "ui-tests/**"
+      - ".github/workflows/ui-tests.yml"
+      - "react-redux-realworld-example-app/**"
+      - "node-express-realworld-example-app/**"
+
+jobs:
+  ui-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install frontend dependencies
+        working-directory: react-redux-realworld-example-app
+        run: npm install
+
+      - name: Install backend dependencies
+        working-directory: node-express-realworld-example-app
+        run: npm install
+
+      - name: Setup backend (Prisma)
+        working-directory: node-express-realworld-example-app
+        run: |
+          npx prisma generate
+          npx prisma migrate deploy
+
+      - name: Install UI test dependencies
+        working-directory: ui-tests
+        run: npm install
+
+      - name: Install Playwright Browsers
+        working-directory: ui-tests
+        run: npx playwright install --with-deps
+
+      - name: Start backend and frontend
+        run: |
+          npm run --prefix node-express-realworld-example-app start &
+          sleep 5
+          npm run --prefix react-redux-realworld-example-app start &
+          sleep 10
+
+      - name: Run UI Tests
+        run: npx playwright test ui-tests/tests --reporter html
+
+      - name: Upload HTML Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: ui-test-report
+          path: ui-tests/playwright-report

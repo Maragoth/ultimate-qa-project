@@ -18,18 +18,18 @@ It is part of the larger **Ultimate QA Project**, designed to demonstrate full Q
 - Response time checks (<1000ms)
 - Logs for response status, body, time
 
-⏳ **New Suites to be implemented**:
-- ⏳ Expired or malformed JWT returns 401 (`auth suite`)
-- ⏳ Missing Authorization header returns 401
-- ⏳ Broken token is rejected
-- ⏳ Malformed JSON returns 400 (`input validation suite`)
-- ⏳ Boundary input testing (e.g. long title, short username)
-- ⏳ Unicode & special characters handling
-- ⏳ Unsupported HTTP methods return 405
-- ⏳ Data consistency after creation (immediate GET)
-- ⏳ Deleting article removes related comments
-- ⏳ JSON Schema strict match (drift detection)
-- ⏳ Partial update of user settings (`PUT /user` with only one field)
+✅ **Completed Suites**:
+- ✅ Expired or malformed JWT returns 401 (`auth suite`)
+- ✅ Missing Authorization header returns 401
+- ✅ Broken token is rejected
+- ✅ Malformed JSON returns 400 (`input validation suite`)
+- ✅ Boundary input testing (e.g. long title, short username)
+- ✅ Unicode & special characters handling
+- ✅ Unsupported HTTP methods return 405
+- ✅ Data consistency after creation (immediate GET)
+- ✅ Deleting article removes related comments
+- ✅ JSON Schema strict match (drift detection)
+- ✅ Partial update of user settings (`PUT /user` with only one field)
 
 ---
 
@@ -46,8 +46,8 @@ It is part of the larger **Ultimate QA Project**, designed to demonstrate full Q
 api-tests/
 ├── fixtures/                    # Fixtures for reusable test data (e.g. auth token)
 │   └── auth_token.py
-├── tests/                       # All API test cases
-│   ├── schemas/                 # JSON Schemas for response validation
+├── tests/                            # All API test cases
+│   ├── schemas/                       # JSON Schemas for response validation
 │   │   ├── article.schema.json
 │   │   ├── articles.schema.json
 │   │   ├── comment.schema.json
@@ -55,18 +55,18 @@ api-tests/
 │   │   ├── profile.schema.json
 │   │   ├── profiles.schema.json
 │   │   └── tags.schema.json
-│   ├── test_auth.py            # Registration, login, auth errors
-│   ├── test_articles.py        # Article CRUD operations
-│   ├── test_comments.py        # Comment create/delete
-│   ├── test_profiles.py        # View/follow/unfollow profiles
-│   ├── test_tags.py            # Get available tags
-│   ├── test_favorites.py       # Favorite/unfavorite articles
-│   ├── test_settings.py        # Update user settings
-│   ├── test_validation.py         # ⏳ Malformed JSON, boundary values, unicode, unsupported method
-│   ├── test_data_integrity.py     # ⏳ Data consistency after POST, delete cascade (article → comments)
-│   ├── test_partial_update.py     # ⏳ Partial update – PUT /user with only bio/image
-│   ├── test_auth_invalid.py       # ⏳ Expired token, missing token, broken token
-├── utils/                      # Helper functions for requests, logging, schema validation
+│   ├── test_auth.py                      # Registration, login, auth errors
+│   ├── test_articles.py                  # Article CRUD operations
+│   ├── test_comments.py                  # Comment create/delete
+│   ├── test_profiles.py                  # View/follow/unfollow profiles
+│   ├── test_tags.py                      # Get available tags
+│   ├── test_favorites.py                 # Favorite/unfavorite articles
+│   ├── test_settings.py                  # Update user settings
+│   ├── test_schema_validation.py         # Malformed JSON, boundary values, unicode, unsupported method
+│   ├── test_data_integrity.py            # Data consistency after POST, delete cascade (article → comments)
+│   ├── test_partial_update.py            # Partial update – PUT /user with only bio/image
+│   ├── test_auth_invalid.py              # Expired token, missing token, broken token
+├── utils/                           # Helper functions for requests, logging, schema validation
 │   └── helpers.py
 ├── conftest.py                 # Global pytest configuration and fixtures
 └── README.md                   # How to run API tests
@@ -84,9 +84,9 @@ api-tests/
 | Tags              | ✅ Done |
 | Favorites         | ✅ Done |
 | User Settings     | ✅ Done |
-| Response Schema Validation | ✅ Done |
-| Performance Check (<1s) | ✅ Done |
-| Extended Auth & Validation | ⏳ In Progress |
+| Response Schema Validation |✅ Done |
+| Performance Check (<1s) |   ✅ Done |
+| Extended Auth & Validation |✅ Done |
 
 ---
 

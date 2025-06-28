@@ -1,0 +1,99 @@
+name: All Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test-matrix:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        target: [api, ui, mobile]
+
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        if: matrix.target != 'ui'
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.12
+
+      - name: Setup Node.js
+        if: matrix.target != 'api'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Backend
+        working-directory: node-express-realworld-example-app
+        run: npm install
+
+      - name: Setup Backend DB
+        working-directory: node-express-realworld-example-app
+        run: |
+          npx prisma generate
+          npx prisma migrate deploy
+
+      - name: Install Frontend
+        if: matrix.target != 'api'
+        working-directory: react-redux-realworld-example-app
+        run: npm install
+
+      - name: Install UI Test Deps
+        if: matrix.target == 'ui'
+        working-directory: ui-tests
+        run: |
+          npm install
+          npx playwright install --with-deps
+
+      - name: Install Python Deps
+        if: matrix.target != 'ui'
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Start Backend & Frontend
+        run: |
+          npm run --prefix node-express-realworld-example-app start &
+          sleep 5
+          npm run --prefix react-redux-realworld-example-app start &
+          sleep 10
+
+      - name: Run API Tests
+        if: matrix.target == 'api'
+        run: pytest api-tests/tests --html=test-results/api-report.html --self-contained-html
+
+      - name: Run UI Tests
+        if: matrix.target == 'ui'
+        run: npx playwright test ui-tests/tests --reporter html
+
+      - name: Run Mobile Tests
+        if: matrix.target == 'mobile'
+        run: pytest mobile-tests/tests --html=test-results/mobile-report.html --self-contained-html
+
+      - name: Upload Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.target }}-test-report
+          path: |
+            test-results/*.html
+            ui-tests/playwright-report

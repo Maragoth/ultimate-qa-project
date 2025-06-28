@@ -1,0 +1,16 @@
+name: Mobile Tests (Local Only)
+
+on:
+  workflow_dispatch: # ręczne uruchamianie przez GitHub UI
+
+jobs:
+  mobile-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Notice – Mobile tests run only on local machine
+        run: |
+          echo "🚫 Mobile tests require a real Android device and Appium."
+          echo "❌ Cannot execute on GitHub Actions."
+          echo "✅ Please run tests locally using:"
+          echo "    pytest mobile-tests/tests --html=test-results/mobile-report.html --self-contained-html"
