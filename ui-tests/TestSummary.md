@@ -50,7 +50,10 @@ Covers the [RealWorld Example App](https://github.com/gothinkster/react-redux-re
 - **Assertions**: Role-based, visual, and deep UI structure checks
 - **Helpers**: Custom session, API, and data generators
 
+## 📁 Report Location
 
+HTML test reports are available as artifacts in GitHub Actions:  
+Actions → UI Tests → Artifacts → `ui-test-report`
 
 ## 📌 Conclusion
 

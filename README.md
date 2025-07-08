@@ -190,5 +190,3 @@ Focused on practical, scalable, and production-ready QA solutions.
 
 © 2025 Adam Fedorowicz  
 Licensed under the [MIT License](https://opensource.org/licenses/MIT).
-
-Manual CI Trigger

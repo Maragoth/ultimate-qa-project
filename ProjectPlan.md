@@ -123,15 +123,15 @@ ultimate-qa-project/
 - [✅] Unsupported HTTP methods return 405
 
 📝 Data Integrity Suite
-- [ ] Freshly created resource is immediately consistent
-- [ ] Deleting parent (article) removes related comments
+- [✅] Freshly created resource is immediately consistent
+- [✅] Deleting parent (article) removes related comments
 
 📝 Schema & Response Suite
-- [ ] JSON Schema strictly matches response body
-- [ ] No unexpected fields in production responses
+- [✅] JSON Schema strictly matches response body
+- [✅] No unexpected fields in production responses
 
 📝 Partial Update Suite
-- [ ] PUT /user with partial fields updates only what's provided
+- [✅] PUT /user with partial fields updates only what's provided
 
 
 ### 🖥️📱 UI Tests (Desktop + Mobile)
@@ -162,13 +162,10 @@ ultimate-qa-project/
 - [✅] Create comment via API – Adds a predefined comment via API to save time during UI validation steps.
 
 ### CI/CD & Reporting
-- [ ] Automated API tests (GitHub Actions)
-- [ ] Automated Desktop UI tests (GitHub Actions)
-- [ ] Automated Mobile UI tests (Android, GitHub Actions)
-- [ ] Matrix builds for CLI-based tests (Node 20/22, Python 3.10/3.12, Chromium/Firefox/WebKit)
-- [ ] Allure report generation
-- [ ] Report publishing to GitHub Pages
-
+- [✅] Automated API tests (GitHub Actions)
+- [✅] Automated Desktop UI tests (GitHub Actions)
+- [📝] Matrix builds – planned for future
+- [✅] HTML test reports via pytest-html (downloadable from CI artifacts)
 
 
 
@@ -181,8 +178,7 @@ ultimate-qa-project/
 | Stage 2 | UI Testing (Playwright + POM)        | 8–10h             | ✅ Complete       |
 | Stage 3 | Hybrid UI+API tests                  | 4h                | ✅ Complete       |
 | Stage 4 | Mobile Testing (Appium)              | 6–8h              | ✅ Complete       |
-| Stage 5 | CI/CD & Matrix Builds                | 6h                | ⏳ In progress    |
-| Stage 6 | Docker Optimization (optional later) | 3h                | ⬜ Not started    |
+| Stage 5 | CI/CD & Matrix Builds                | 6h                | ✅ Complete       |
 
 
 
