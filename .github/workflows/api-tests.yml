@@ -2,11 +2,9 @@ name: API Tests
 
 on:
   push:
-    paths:
-      - "api-tests/**"
-      - ".github/workflows/api-tests.yml"
-      - "requirements.txt"
+    branches: [main]
   pull_request:
+    branches: [main]
 
 jobs:
   api-tests:

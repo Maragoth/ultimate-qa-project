@@ -1,7 +1,7 @@
 name: Mobile Tests (Local Only)
 
 on:
-  workflow_dispatch: # ręczne uruchamianie przez GitHub UI
+  workflow_dispatch:
 
 jobs:
   mobile-tests:
