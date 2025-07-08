@@ -22,10 +22,19 @@ export async function createRandomUserViaAPI() {
 
 
 export async function createArticleViaAPI(token: string, article: any) {
+  const apiArticle = {
+    ...article,
+    tagList: article.tags,
+  };
+
   const response = await axios.post(
     'http://localhost:3000/api/articles',
-    { article },
-    { headers: { Authorization: `Token ${token}` } }
+    { article: apiArticle },
+    {
+      headers: {
+        Authorization: `Token ${token}`,
+      },
+    }
   );
 
   return {
@@ -33,6 +42,7 @@ export async function createArticleViaAPI(token: string, article: any) {
     slug: response.data.article.slug,
   };
 }
+
 
 export async function addCommentViaAPI(token: string, slug: string, commentData: { body: string }) {
   const response = await fetch(`http://localhost:3000/api/articles/${slug}/comments`, {

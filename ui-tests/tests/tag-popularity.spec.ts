@@ -17,14 +17,14 @@ test('Tag from new articles appears in "Popular Tags"', async ({ browser }) => {
     title: 'Popular-A',
     description: 'Desc A',
     body: 'Body A',
-    tagList: [tag],
+    tags: [tag],
   });
 
   await createArticleViaAPI(user.token, {
     title: 'Popular-B',
     description: 'Desc B',
     body: 'Body B',
-    tagList: [tag],
+    tags: [tag],
   });
 
   // Step 4: Go to homepage and check if tag appears in "Popular Tags"

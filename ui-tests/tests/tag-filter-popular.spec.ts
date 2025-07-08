@@ -14,7 +14,7 @@ test('Click tag in sidebar and verify articles contain that tag', async ({ brows
 
   // Step 2: Generate article with unique tag and create it via API
   const article = generateArticle('SidebarTag', `Tag-${Math.floor(Math.random() * 1000000)}`);
-  const tag = article.tagList[0];
+  const tag = article.tags[0];
   await createArticleViaAPI(user.token, article);
 
   // Step 3: Visit homepage and wait for tag to appear

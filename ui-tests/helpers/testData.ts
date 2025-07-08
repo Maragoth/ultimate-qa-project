@@ -13,6 +13,6 @@ export function generateArticle(baseName: string, tag: string) {
     title: `Test Title - ${baseName} - ${id}`,
     description: 'Test description',
     body: 'This is the body of the test article.',
-    tagList: [tag]
+    tags: [tag]
   };
 }

@@ -16,13 +16,13 @@ test('Tag navigation should activate selected tag (expected failure)', async ({ 
     title: 'Tagged-Article-A',
     description: 'Description A',
     body: 'Body A',
-    tagList: [tag],
+    tags: [tag],
   });
   await createArticleViaAPI(user.token, {
     title: 'Tagged-Article-B',
     description: 'Description B',
     body: 'Body B',
-    tagList: [tag],
+    tags: [tag],
   });
 
   // Step 3: Go to Global Feed
@@ -62,13 +62,13 @@ test('Clicking a tag redirects to article instead of tag filter (bug check)', as
     title: 'Tagged-Article-A',
     description: 'Description A',
     body: 'Body A',
-    tagList: [tag],
+    tags: [tag],
   });
   await createArticleViaAPI(user.token, {
     title: 'Tagged-Article-B',
     description: 'Description B',
     body: 'Body B',
-    tagList: [tag],
+    tags: [tag],
   });
 
   // Step 3: Go to Global Feed
