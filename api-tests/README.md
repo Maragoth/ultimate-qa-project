@@ -8,6 +8,8 @@ It is part of the larger **Ultimate QA Project**, designed to demonstrate full Q
 
 ## ✅ Scope & Goals
 - User Registration (success & duplicate prevention)
+- User Login (success)
+- User Login - invalid password (401)
 - Full CRUD testing of Articles & Comments
 - Profiles (follow/unfollow)
 - Tags retrieval
@@ -78,6 +80,7 @@ api-tests/
 | Test Area         | Status |
 |-------------------|--------|
 | User Registration | ✅ Done |
+| User Login        | ✅ Done |
 | Articles CRUD     | ✅ Done |
 | Comments CRUD     | ✅ Done |
 | Profiles          | ✅ Done |
